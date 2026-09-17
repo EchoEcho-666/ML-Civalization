@@ -153,7 +153,7 @@ function App() {
       authors: paper.authors,
       venue: paper.venue,
       status: 'unread',
-      summary: paper.abstract ?? 'Metadata imported from an open scholarly index. Read and analyze this paper to complete its intellectual history.',
+      summary: 'Metadata imported from an open scholarly index. Follow the source link, then write an original analysis of this paper’s role in the field.',
       motivation: 'Not yet analyzed. Identify the limitation that made this paper necessary.',
       openQuestions: ['What limitation made this paper necessary?', 'Which result most clearly supports its central claim?'],
       tags: ['imported', paper.provider],

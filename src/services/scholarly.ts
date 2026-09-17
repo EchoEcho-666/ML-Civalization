@@ -5,7 +5,6 @@ export interface ScholarlyPaper {
   authors: string[]
   year?: number
   venue?: string
-  abstract?: string
   sourceUrl: string
   pdfUrl?: string
   citationCount?: number
@@ -21,7 +20,6 @@ interface OpenAlexWork {
   authorships?: Array<{ author?: { display_name?: string } }>
   primary_location?: { source?: { display_name?: string }; landing_page_url?: string; pdf_url?: string }
   best_oa_location?: { landing_page_url?: string; pdf_url?: string }
-  abstract_inverted_index?: Record<string, number[]>
 }
 
 interface CrossrefItem {
@@ -31,15 +29,7 @@ interface CrossrefItem {
   published?: { 'date-parts'?: number[][] }
   'container-title'?: string[]
   URL?: string
-  abstract?: string
   'is-referenced-by-count'?: number
-}
-
-function reconstructAbstract(index?: Record<string, number[]>) {
-  if (!index) return undefined
-  const words: Array<[number, string]> = []
-  Object.entries(index).forEach(([word, positions]) => positions.forEach((position) => words.push([position, word])))
-  return words.sort((a, b) => a[0] - b[0]).map((entry) => entry[1]).join(' ')
 }
 
 function cleanDoi(value?: string) {
@@ -60,7 +50,6 @@ async function searchOpenAlex(query: string, signal?: AbortSignal): Promise<Scho
       authors: (work.authorships ?? []).map((entry) => entry.author?.display_name).filter((name): name is string => Boolean(name)),
       year: work.publication_year,
       venue: work.primary_location?.source?.display_name,
-      abstract: reconstructAbstract(work.abstract_inverted_index),
       sourceUrl: work.primary_location?.landing_page_url ?? (doi ? `https://doi.org/${doi}` : work.id),
       pdfUrl: work.best_oa_location?.pdf_url ?? work.primary_location?.pdf_url,
       citationCount: work.cited_by_count,
@@ -83,7 +72,6 @@ async function searchCrossref(query: string, signal?: AbortSignal): Promise<Scho
       authors: (item.author ?? []).map((author) => [author.given, author.family].filter(Boolean).join(' ')),
       year: item.published?.['date-parts']?.[0]?.[0],
       venue: item['container-title']?.[0],
-      abstract: item.abstract?.replace(/<[^>]+>/g, ''),
       sourceUrl: item.URL ?? (doi ? `https://doi.org/${doi}` : 'https://www.crossref.org/'),
       citationCount: item['is-referenced-by-count'],
       provider: 'crossref' as const,

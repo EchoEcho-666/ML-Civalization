@@ -1,4 +1,4 @@
--- ML Civilization personal research graph schema.
+-- ML Evolution personal research graph schema.
 -- Run this in a Supabase project owned by you. Never reuse another site's project keys.
 
 create extension if not exists "pgcrypto";

@@ -181,7 +181,7 @@ export const researchNodes: ResearchNode[] = [
     tags: ['routing', 'scale', 'sparsity'], position: { x: 2520, y: -80 },
   },
   {
-    id: 'modern-llm', type: 'concept', title: 'Modern Language Models', subtitle: 'General models at civilization scale', year: 2023, status: 'frontier',
+    id: 'modern-llm', type: 'concept', title: 'Modern Language Models', subtitle: 'General models at frontier scale', year: 2023, status: 'frontier',
     summary: 'Large autoregressive Transformers combine scale, instruction tuning, tools, retrieval, and human feedback.',
     motivation: 'Scaling produced increasingly general behavior, but reliable interaction required new training stages and interfaces.',
     limitations: ['Hallucination', 'Opaque internal mechanisms', 'High resource cost', 'Evaluation contamination'],

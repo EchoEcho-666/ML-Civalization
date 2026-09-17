@@ -38,7 +38,7 @@ ResearchRabbit and Litmaps remain design references only because no supported pu
 
 ## Supabase boundary
 
-Use a new Supabase project owned by the ML Civilization maintainer. The included `supabase/schema.sql` creates user-owned nodes, edges, and notes with Row Level Security.
+Use a new Supabase project owned by the ML Evolution maintainer. The included `supabase/schema.sql` creates user-owned nodes, edges, and notes with Row Level Security.
 
 Do not place provider API keys in Vite environment variables: values prefixed with `VITE_` are shipped to the browser. A later Supabase Edge Function should proxy authenticated OpenAlex/Semantic Scholar requests and cache normalized results. Only the Supabase publishable/anon key belongs in the browser, protected by RLS.
 

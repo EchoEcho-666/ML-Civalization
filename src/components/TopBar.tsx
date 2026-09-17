@@ -18,7 +18,7 @@ export function TopBar({ fog, lineage, timeline, selectedTitle, onToggleFog, onT
     <header className="topbar">
       <div className="brand-lockup">
         <div className="brand-sigil"><Sparkles size={16} /></div>
-        <div><div className="brand-name">ML CIVILIZATION</div><div className="brand-sub">AN INTELLECTUAL ATLAS</div></div>
+        <div><div className="brand-name">ML EVOLUTION</div><div className="brand-sub">AN INTELLECTUAL ATLAS</div></div>
       </div>
       <div className="era-indicator">
         <span>ACTIVE DOMAIN</span>
