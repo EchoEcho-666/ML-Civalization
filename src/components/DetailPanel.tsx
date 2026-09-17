@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowDownRight, BookMarked, ChevronDown, CircleDotDashed, GitFork, Lightbulb, Network, PanelRightClose, Route, Save, SearchCheck } from 'lucide-react'
+import { ArrowDownRight, BookMarked, ChevronDown, CircleDotDashed, ExternalLink, FileText, GitFork, Lightbulb, Network, PanelRightClose, Route, Save, SearchCheck } from 'lucide-react'
 import type { ExplorationStatus, ResearchNode } from '../types'
 import { nodeTypeLabels, statusLabels } from '../data/researchGraph'
 
@@ -60,6 +60,16 @@ export function DetailPanel({ node, note, status, onClose, onStatus, onNote, onT
         </div>
 
         <div className="detail-summary"><span>IN BRIEF</span><p>{node.summary}</p></div>
+
+        {(node.doi || node.sourceUrl || node.pdfUrl) && <div className="source-links">
+          <span>PRIMARY SOURCES</span>
+          <div>
+            {node.doi && <a href={`https://doi.org/${node.doi}`} target="_blank" rel="noreferrer"><ExternalLink size={12} /> DOI</a>}
+            {node.sourceUrl && <a href={node.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={12} /> Publisher</a>}
+            {node.pdfUrl && <a href={node.pdfUrl} target="_blank" rel="noreferrer"><FileText size={12} /> Open PDF</a>}
+          </div>
+          {node.dataSource && node.dataSource !== 'seed' && <small>Metadata imported from {node.dataSource}. Relationship interpretation remains yours.</small>}
+        </div>}
 
         <div className="sections">
           <Section title="Why this existed" open>{node.motivation && <p>{node.motivation}</p>}</Section>

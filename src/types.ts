@@ -57,6 +57,13 @@ export interface ResearchNode {
   notes?: string
   tags: string[]
   position: { x: number; y: number }
+  doi?: string
+  arxivId?: string
+  sourceUrl?: string
+  pdfUrl?: string
+  externalId?: string
+  dataSource?: 'seed' | 'openalex' | 'crossref' | 'opencitations'
+  citationCount?: number
 }
 
 export interface ResearchEdge {

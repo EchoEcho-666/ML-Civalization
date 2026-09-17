@@ -31,7 +31,7 @@ export const researchNodes: ResearchNode[] = [
     evidence: ['Synthetic long-lag tasks showed learning where standard RNNs failed'],
     missingEvidence: ['Broader natural-language comparisons under matched compute'],
     laterConsequences: ['Dominant recurrent backbone for sequence modeling', 'Enabled stronger encoder–decoder systems'],
-    openQuestions: ['How much of the gain comes from additive state versus gating?'], tags: ['gating', 'memory', 'sequence'], position: { x: 520, y: 70 },
+    openQuestions: ['How much of the gain comes from additive state versus gating?'], tags: ['gating', 'memory', 'sequence'], position: { x: 520, y: 70 }, doi: '10.1162/neco.1997.9.8.1735', sourceUrl: 'https://doi.org/10.1162/neco.1997.9.8.1735', dataSource: 'seed',
   },
   {
     id: 'seq2seq', type: 'paper', title: 'Sequence to Sequence Learning', subtitle: 'One model, variable-length mapping', year: 2014, authors: ['Ilya Sutskever', 'Oriol Vinyals', 'Quoc V. Le'], venue: 'NeurIPS', status: 'understood',
@@ -44,7 +44,7 @@ export const researchNodes: ResearchNode[] = [
     assumptions: ['A single learned vector can summarize the source well enough'],
     evidence: ['Competitive English–French translation and representation analyses'],
     missingEvidence: ['Controlled degradation by source length'], laterConsequences: ['Attention mechanisms', 'General encoder–decoder paradigm'],
-    openQuestions: ['How should a decoder retrieve specific source details?'], tags: ['encoder-decoder', 'translation', 'sequence'], position: { x: 850, y: 70 },
+    openQuestions: ['How should a decoder retrieve specific source details?'], tags: ['encoder-decoder', 'translation', 'sequence'], position: { x: 850, y: 70 }, doi: '10.48550/arXiv.1409.3215', arxivId: '1409.3215', sourceUrl: 'https://arxiv.org/abs/1409.3215', pdfUrl: 'https://arxiv.org/pdf/1409.3215', dataSource: 'seed',
   },
   {
     id: 'fixed-bottleneck', type: 'problem', title: 'Fixed-Size Context Bottleneck', subtitle: 'An entire sequence, compressed once', year: 2014, status: 'understood',
@@ -63,7 +63,7 @@ export const researchNodes: ResearchNode[] = [
     improvements: ['Better long-sentence translation', 'Inspectable soft alignments'], limitations: ['Recurrent encoder and decoder remain sequential', 'Attention cost grows with source length'],
     assumptions: ['A convex mixture of encoder states is a useful context'], evidence: ['Improved BLEU and qualitatively plausible alignments'],
     missingEvidence: ['Whether alignment quality causes translation gains'], laterConsequences: ['General neural attention', 'Memory access as a learned operation'],
-    openQuestions: ['Are attention weights faithful explanations?'], tags: ['attention', 'alignment', 'translation'], position: { x: 1370, y: -170 },
+    openQuestions: ['Are attention weights faithful explanations?'], tags: ['attention', 'alignment', 'translation'], position: { x: 1370, y: -170 }, doi: '10.48550/arXiv.1409.0473', arxivId: '1409.0473', sourceUrl: 'https://arxiv.org/abs/1409.0473', pdfUrl: 'https://arxiv.org/pdf/1409.0473', dataSource: 'seed',
   },
   {
     id: 'luong', type: 'paper', title: 'Effective Approaches to Attention-based NMT', subtitle: 'Global and local alignment variants', year: 2015, authors: ['Minh-Thang Luong', 'Hieu Pham', 'Christopher D. Manning'], venue: 'EMNLP', status: 'understood',
@@ -71,7 +71,7 @@ export const researchNodes: ResearchNode[] = [
     motivation: 'Attention worked, but its useful design choices and tradeoffs were still unclear.', mechanism: 'Score decoder and encoder states using dot, general, or concatenation functions.',
     contribution: 'Simpler multiplicative attention and practical global/local variants.', improvements: ['Faster scoring', 'Clearer design space'], limitations: ['Still attached to recurrence'],
     evidence: ['Translation comparisons across attention variants'], laterConsequences: ['Dot-product attention used by Transformers'],
-    openQuestions: ['Which scoring inductive bias matters under scale?'], tags: ['attention', 'alignment'], position: { x: 1380, y: 100 },
+    openQuestions: ['Which scoring inductive bias matters under scale?'], tags: ['attention', 'alignment'], position: { x: 1380, y: 100 }, doi: '10.48550/arXiv.1508.04025', arxivId: '1508.04025', sourceUrl: 'https://arxiv.org/abs/1508.04025', pdfUrl: 'https://arxiv.org/pdf/1508.04025', dataSource: 'seed',
   },
   {
     id: 'attention', type: 'concept', title: 'Attention', subtitle: 'Content-addressable information routing', year: 2014, status: 'mastered',
@@ -103,7 +103,7 @@ export const researchNodes: ResearchNode[] = [
     laterConsequences: ['BERT', 'GPT family', 'Vision Transformer', 'Modern foundation models'],
     openQuestions: ['Which Transformer components are essential?', 'When is quadratic global attention wasteful?'],
     notes: 'Trace which gains come from parallel optimization versus representational capacity.',
-    tags: ['transformer', 'attention', 'parallelism', 'foundation'], position: { x: 1920, y: -40 },
+    tags: ['transformer', 'attention', 'parallelism', 'foundation'], position: { x: 1920, y: -40 }, doi: '10.48550/arXiv.1706.03762', arxivId: '1706.03762', sourceUrl: 'https://arxiv.org/abs/1706.03762', pdfUrl: 'https://arxiv.org/pdf/1706.03762', dataSource: 'seed',
   },
   {
     id: 'positional-encoding', type: 'mechanism', title: 'Positional Encoding', subtitle: 'Restoring order to a set-like operation', year: 2017, status: 'understood',
@@ -120,7 +120,7 @@ export const researchNodes: ResearchNode[] = [
     contribution: 'A general-purpose pretrained language representation transferable with minimal task-specific architecture.',
     improvements: ['Strong transfer across language understanding tasks'], limitations: ['Pretrain–finetune mismatch', 'Not naturally generative'],
     assumptions: ['Masked token recovery induces broadly useful semantics'], evidence: ['Large gains across GLUE, SQuAD, and related benchmarks'],
-    laterConsequences: ['Encoder-only foundation models'], openQuestions: ['What properties does masking teach most efficiently?'], tags: ['pretraining', 'language'], position: { x: 2250, y: -60 },
+    laterConsequences: ['Encoder-only foundation models'], openQuestions: ['What properties does masking teach most efficiently?'], tags: ['pretraining', 'language'], position: { x: 2250, y: -60 }, doi: '10.48550/arXiv.1810.04805', arxivId: '1810.04805', sourceUrl: 'https://arxiv.org/abs/1810.04805', pdfUrl: 'https://arxiv.org/pdf/1810.04805', dataSource: 'seed',
   },
   {
     id: 'gpt', type: 'paper', title: 'Generative Pre-Training', subtitle: 'Language modeling as a general substrate', year: 2018, authors: ['Alec Radford', 'Karthik Narasimhan', 'Tim Salimans', 'Ilya Sutskever'], venue: 'OpenAI', status: 'understood',
@@ -129,7 +129,7 @@ export const researchNodes: ResearchNode[] = [
     contribution: 'Demonstrated generative pretraining as a general route to task adaptation.', improvements: ['Reusable representations', 'A unified generative interface'],
     limitations: ['Unidirectional context during training', 'Scaling cost'], assumptions: ['Next-token prediction rewards useful world regularities'],
     evidence: ['Transfer gains across diverse NLP tasks'], laterConsequences: ['Scaling language models', 'In-context learning'],
-    openQuestions: ['Which capabilities are learned versus elicited by prompting?'], tags: ['pretraining', 'generation', 'language'], position: { x: 2260, y: 200 },
+    openQuestions: ['Which capabilities are learned versus elicited by prompting?'], tags: ['pretraining', 'generation', 'language'], position: { x: 2260, y: 200 }, sourceUrl: 'https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf', pdfUrl: 'https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf', dataSource: 'seed',
   },
   {
     id: 'vit', type: 'paper', title: 'Vision Transformer', subtitle: 'Images as sequences of patches', year: 2020, authors: ['Alexey Dosovitskiy', 'Lucas Beyer', 'Alexander Kolesnikov', 'et al.'], venue: 'ICLR', status: 'unread',
@@ -140,7 +140,7 @@ export const researchNodes: ResearchNode[] = [
     improvements: ['Cross-modal architectural unification', 'Strong scaling behavior'], limitations: ['Data hungry', 'Quadratic cost with image resolution'],
     assumptions: ['Large-scale data can compensate for weaker spatial priors'], evidence: ['Strong transfer after large-scale image pretraining'],
     missingEvidence: ['Low-data comparisons without heavy augmentation'], laterConsequences: ['Transformer-based vision backbones', 'Multimodal models'],
-    openQuestions: ['Which visual priors should be explicit rather than learned?'], tags: ['vision', 'transfer', 'patches'], position: { x: 2280, y: -560 },
+    openQuestions: ['Which visual priors should be explicit rather than learned?'], tags: ['vision', 'transfer', 'patches'], position: { x: 2280, y: -560 }, doi: '10.48550/arXiv.2010.11929', arxivId: '2010.11929', sourceUrl: 'https://arxiv.org/abs/2010.11929', pdfUrl: 'https://arxiv.org/pdf/2010.11929', dataSource: 'seed',
   },
   {
     id: 'quadratic-cost', type: 'problem', title: 'Quadratic Attention Cost', subtitle: 'Every token meets every token', year: 2017, status: 'unresolved',

@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { ExplorationStatus } from '../types'
+import type { ExplorationStatus, ResearchEdge, ResearchNode } from '../types'
 
 interface SavedResearchState {
   statuses: Record<string, ExplorationStatus>
   notes: Record<string, string>
+  importedNodes: ResearchNode[]
+  importedEdges: ResearchEdge[]
 }
 
 const STORAGE_KEY = 'ml-civilization:exploration:v1'
@@ -11,9 +13,16 @@ const STORAGE_KEY = 'ml-civilization:exploration:v1'
 function readState(): SavedResearchState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) as SavedResearchState : { statuses: {}, notes: {} }
+    if (!raw) return { statuses: {}, notes: {}, importedNodes: [], importedEdges: [] }
+    const parsed = JSON.parse(raw) as Partial<SavedResearchState>
+    return {
+      statuses: parsed.statuses ?? {},
+      notes: parsed.notes ?? {},
+      importedNodes: parsed.importedNodes ?? [],
+      importedEdges: parsed.importedEdges ?? [],
+    }
   } catch {
-    return { statuses: {}, notes: {} }
+    return { statuses: {}, notes: {}, importedNodes: [], importedEdges: [] }
   }
 }
 
@@ -32,5 +41,17 @@ export function useResearchState() {
     setState((current) => ({ ...current, notes: { ...current.notes, [id]: note } }))
   }, [])
 
-  return { ...state, setStatus, setNote }
+  const addImportedPaper = useCallback((node: ResearchNode, edge?: ResearchEdge) => {
+    setState((current) => ({
+      ...current,
+      importedNodes: current.importedNodes.some((item) => item.id === node.id)
+        ? current.importedNodes
+        : [...current.importedNodes, node],
+      importedEdges: edge && !current.importedEdges.some((item) => item.id === edge.id)
+        ? [...current.importedEdges, edge]
+        : current.importedEdges,
+    }))
+  }, [])
+
+  return { ...state, setStatus, setNote, addImportedPaper }
 }
