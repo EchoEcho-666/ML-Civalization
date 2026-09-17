@@ -24,6 +24,7 @@ import { TopBar } from './components/TopBar'
 import { useResearchState } from './hooks/useResearchState'
 import { PaperDiscoveryPanel } from './components/PaperDiscoveryPanel'
 import type { ScholarlyPaper } from './services/scholarly'
+import { Prologue } from './components/Prologue'
 
 const nodeTypes = { research: ResearchNode }
 const edgeTypes = { causal: CausalEdge }
@@ -82,6 +83,7 @@ function App() {
   const [discoveryOpen, setDiscoveryOpen] = useState(false)
   const [activeRail, setActiveRail] = useState('atlas')
   const [introVisible, setIntroVisible] = useState(true)
+  const [prologueOpen, setPrologueOpen] = useState(() => sessionStorage.getItem('ml-evolution:prologue-seen') !== 'true')
 
   const allNodes = useMemo(() => [...researchNodes, ...importedNodes], [importedNodes])
   const allEdges = useMemo(() => [...researchEdges, ...importedEdges], [importedEdges])
@@ -197,6 +199,11 @@ function App() {
   }, [])
 
   const handleRail = (value: string) => {
+    if (value === 'origins') {
+      setPrologueOpen(true)
+      setActiveRail('origins')
+      return
+    }
     setActiveRail(value)
     if (value === 'lineage') setTraceMode('all')
     if (value === 'atlas') setTraceMode(null)
@@ -225,6 +232,12 @@ function App() {
   useEffect(() => {
     window.setTimeout(() => fitView({ padding: 0.18, duration: 800, maxZoom: 0.9 }), 50)
   }, [fitView, timeline])
+
+  const enterAtlas = () => {
+    sessionStorage.setItem('ml-evolution:prologue-seen', 'true')
+    setPrologueOpen(false)
+    setActiveRail('atlas')
+  }
 
   return (
     <div className="app-shell">
@@ -296,6 +309,7 @@ function App() {
       {progressOpen && <ProgressPanel nodes={allNodes} statuses={statuses} onClose={() => setProgressOpen(false)} />}
       {discoveryOpen && <PaperDiscoveryPanel selectedNode={selectedNode} onClose={() => setDiscoveryOpen(false)} onImport={importPaper} />}
       {searchOpen && <SearchPalette nodes={allNodes.filter((node) => !fog || statusOf(node) !== 'locked')} onClose={() => setSearchOpen(false)} onSelect={travelTo} />}
+      {prologueOpen && <Prologue onEnter={enterAtlas} />}
     </div>
   )
 }

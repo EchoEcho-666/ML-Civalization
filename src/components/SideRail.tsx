@@ -1,4 +1,4 @@
-import { Binoculars, Compass, GitBranch, Map, NotebookPen, Orbit } from 'lucide-react'
+import { Binoculars, Compass, GitBranch, Map, Network, NotebookPen, Orbit } from 'lucide-react'
 
 interface SideRailProps {
   active: string
@@ -6,6 +6,7 @@ interface SideRailProps {
 }
 
 const items = [
+  { id: 'origins', icon: Network, label: 'Origins' },
   { id: 'atlas', icon: Map, label: 'Atlas' },
   { id: 'lineage', icon: GitBranch, label: 'Lineage' },
   { id: 'frontier', icon: Binoculars, label: 'Frontier' },
