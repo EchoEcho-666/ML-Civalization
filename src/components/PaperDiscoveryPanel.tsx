@@ -43,7 +43,7 @@ export function PaperDiscoveryPanel({ selectedNode, onClose, onImport }: PaperDi
       <div><span>OPEN LITERATURE</span><h2>Link a paper</h2></div>
       <button onClick={onClose} aria-label="Close literature search"><PanelRightClose size={18} /></button>
     </div>
-    <p className="discovery-intro">Search open scholarly metadata, then place a paper into the intellectual atlas with an explicit causal relationship.</p>
+    <p className="discovery-intro">Search open scholarly metadata, then place a paper into the intellectual map with an explicit causal relationship.</p>
 
     <form className="literature-search" onSubmit={runSearch}>
       <Search size={16} />
@@ -63,7 +63,7 @@ export function PaperDiscoveryPanel({ selectedNode, onClose, onImport }: PaperDi
 
     <div className="literature-results">
       {error && <div className="literature-error">{error}</div>}
-      {!loading && !error && !results.length && <div className="literature-empty"><BookPlus size={26} /><strong>Bring evidence into the atlas</strong><span>Imported papers remain distinct from curated causal history until you analyze their relationship.</span></div>}
+      {!loading && !error && !results.length && <div className="literature-empty"><BookPlus size={26} /><strong>Bring evidence into the map</strong><span>Imported papers remain distinct from curated causal history until you analyze their relationship.</span></div>}
       {results.map((paper) => <article className="literature-result" key={`${paper.provider}-${paper.id}`}>
         <div className="result-provider"><span>{paper.provider}</span>{paper.doi && <em>DOI</em>}</div>
         <h3>{paper.title}</h3>
@@ -72,7 +72,7 @@ export function PaperDiscoveryPanel({ selectedNode, onClose, onImport }: PaperDi
         <div className="result-buttons">
           <a href={paper.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={12} /> Source</a>
           {paper.pdfUrl && <a href={paper.pdfUrl} target="_blank" rel="noreferrer"><FileText size={12} /> Open PDF</a>}
-          <button onClick={() => onImport(paper, relation, explanation)}><BookPlus size={12} /> Add to atlas <ArrowUpRight size={12} /></button>
+          <button onClick={() => onImport(paper, relation, explanation)}><BookPlus size={12} /> Add to map <ArrowUpRight size={12} /></button>
         </div>
       </article>)}
     </div>

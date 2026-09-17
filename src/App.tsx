@@ -4,13 +4,12 @@ import {
   BackgroundVariant,
   Controls,
   MarkerType,
-  MiniMap,
   ReactFlow,
   useReactFlow,
   type NodeMouseHandler,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { Crosshair, Focus, Layers3, LocateFixed } from 'lucide-react'
+import { Crosshair, Focus, LocateFixed, RotateCcw } from 'lucide-react'
 import { researchEdges, researchNodes } from './data/researchGraph'
 import type { EdgeType, ExplorationStatus, ResearchEdge, ResearchNode as ResearchNodeModel } from './types'
 import { ResearchNode, type ResearchFlowNode } from './components/ResearchNode'
@@ -30,6 +29,7 @@ const nodeTypes = { research: ResearchNode }
 const edgeTypes = { causal: CausalEdge }
 
 type TraceMode = 'all' | 'ancestors' | 'descendants' | 'unresolved'
+type Theme = 'dark' | 'light'
 
 function traverse(startId: string, direction: 'ancestors' | 'descendants', edges: ResearchEdge[]) {
   const visited = new Set<string>([startId])
@@ -73,7 +73,7 @@ function timelinePosition(node: ResearchNodeModel, index: number, nodes: Researc
 
 function App() {
   const { setCenter, fitView } = useReactFlow<ResearchFlowNode, CausalFlowEdge>()
-  const { statuses, notes, importedNodes, importedEdges, setStatus, setNote, addImportedPaper } = useResearchState()
+  const { statuses, notes, nodePositions, importedNodes, importedEdges, setStatus, setNote, setNodePosition, resetNodePositions, addImportedPaper } = useResearchState()
   const [selectedId, setSelectedId] = useState<string>('transformer')
   const [fog, setFog] = useState(true)
   const [timeline, setTimeline] = useState(false)
@@ -84,9 +84,15 @@ function App() {
   const [activeRail, setActiveRail] = useState('atlas')
   const [introVisible, setIntroVisible] = useState(true)
   const [prologueOpen, setPrologueOpen] = useState(() => sessionStorage.getItem('ml-evolution:prologue-seen') !== 'true')
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = localStorage.getItem('ml-evolution:theme')
+    if (saved === 'dark' || saved === 'light') return saved
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  })
 
   const allNodes = useMemo(() => [...researchNodes, ...importedNodes], [importedNodes])
   const allEdges = useMemo(() => [...researchEdges, ...importedEdges], [importedEdges])
+  const hasCustomLayout = Object.keys(nodePositions).length > 0
   const selectedNode = allNodes.find((node) => node.id === selectedId)
   const tracedIds = useMemo(() => selectedId && traceMode ? buildTrace(selectedId, traceMode, allNodes, allEdges) : null, [allEdges, allNodes, selectedId, traceMode])
 
@@ -98,7 +104,7 @@ function App() {
     return {
       id: record.id,
       type: 'research',
-      position: timeline ? timelinePosition(record, index, allNodes) : record.position,
+      position: timeline ? timelinePosition(record, index, allNodes) : nodePositions[record.id] ?? record.position,
       data: {
         record,
         displayStatus: status,
@@ -107,7 +113,7 @@ function App() {
         selected: record.id === selectedId,
       },
     }
-  }), [allNodes, fog, selectedId, statusOf, timeline, tracedIds])
+  }), [allNodes, fog, nodePositions, selectedId, statusOf, timeline, tracedIds])
 
   const flowEdges = useMemo<CausalFlowEdge[]>(() => allEdges.map((edge) => {
     const dimmed = Boolean(tracedIds && (!tracedIds.has(edge.source) || !tracedIds.has(edge.target)))
@@ -118,7 +124,12 @@ function App() {
     return {
       id: edge.id, source: edge.source, target: edge.target, type: 'causal',
       markerEnd: { type: MarkerType.ArrowClosed, width: 13, height: 13, color: '#71827b' },
-      data: { relation: edge.type, explanation: edge.explanation, dimmed: dimmed || fogged, featured: Boolean(edge.featured) },
+      data: {
+        relation: edge.type,
+        explanation: edge.explanation,
+        dimmed: dimmed || fogged,
+        featured: Boolean(edge.featured),
+      },
     }
   }), [allEdges, allNodes, fog, statusOf, tracedIds])
 
@@ -130,9 +141,9 @@ function App() {
     setSearchOpen(false)
     setProgressOpen(false)
     setDiscoveryOpen(false)
-    const position = timeline ? timelinePosition(record, index, allNodes) : record.position
+    const position = timeline ? timelinePosition(record, index, allNodes) : nodePositions[record.id] ?? record.position
     setCenter(position.x + 110, position.y + 60, { zoom: 1.15, duration: 850 })
-  }, [allNodes, setCenter, timeline])
+  }, [allNodes, nodePositions, setCenter, timeline])
 
   const importPaper = useCallback((paper: ScholarlyPaper, relation: EdgeType, explanation: string) => {
     const duplicate = allNodes.find((node) =>
@@ -233,6 +244,11 @@ function App() {
     window.setTimeout(() => fitView({ padding: 0.18, duration: 800, maxZoom: 0.9 }), 50)
   }, [fitView, timeline])
 
+  useEffect(() => {
+    localStorage.setItem('ml-evolution:theme', theme)
+    document.documentElement.style.colorScheme = theme
+  }, [theme])
+
   const enterAtlas = () => {
     sessionStorage.setItem('ml-evolution:prologue-seen', 'true')
     setPrologueOpen(false)
@@ -240,15 +256,18 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" data-theme={theme}>
       <TopBar
-        fog={fog} lineage={Boolean(traceMode)} timeline={timeline} selectedTitle={selectedNode?.title}
+        fog={fog} lineage={Boolean(traceMode)} timeline={timeline} theme={theme} selectedTitle={selectedNode?.title} selectedYear={selectedNode?.year}
+        contextLabel={timeline ? 'TIMELINE VIEW' : traceMode ? `TRACING ${traceMode.toUpperCase()}` : 'CURRENT FOCUS'}
         onToggleFog={() => setFog(!fog)}
         onToggleLineage={() => { setTraceMode(traceMode ? null : 'all'); setActiveRail(traceMode ? 'atlas' : 'lineage') }}
         onToggleTimeline={() => setTimeline(!timeline)}
         onOpenSearch={() => setSearchOpen(true)}
         onOpenProgress={() => { setProgressOpen(!progressOpen); setDiscoveryOpen(false) }}
         onOpenDiscovery={() => { setDiscoveryOpen(true); setProgressOpen(false) }}
+        onToggleTheme={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}
+        onOpenPrologue={() => { setPrologueOpen(true); setActiveRail('origins') }}
       />
       <SideRail active={activeRail} onSelect={handleRail} />
 
@@ -261,39 +280,32 @@ function App() {
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           onNodeClick={onNodeClick}
+          onNodeDragStop={(_event, node) => setNodePosition(node.id, node.position)}
           minZoom={0.25}
           maxZoom={1.8}
           defaultViewport={{ x: -80, y: 240, zoom: 0.65 }}
-          nodesDraggable={false}
+          nodesDraggable={!timeline}
           nodesConnectable={false}
           elementsSelectable
           proOptions={{ hideAttribution: true }}
           fitView
           fitViewOptions={{ padding: 0.18, maxZoom: 0.82 }}
         >
-          <Background variant={BackgroundVariant.Dots} gap={28} size={1} color="#52605b" />
+          <Background variant={BackgroundVariant.Dots} gap={28} size={1} color={theme === 'light' ? '#8f9b95' : '#52605b'} />
           <Controls position="bottom-left" showInteractive={false} />
-          <MiniMap
-            position="bottom-right"
-            nodeColor={(node) => {
-              const kind = (node.data as ResearchFlowNode['data'])?.record.type
-              return kind === 'problem' ? '#b36d4d' : kind === 'research-idea' ? '#bfa45a' : kind === 'paper' ? '#799e91' : '#647b80'
-            }}
-            maskColor="rgba(5, 9, 10, .78)"
-            pannable zoomable
-          />
           {timeline && <div className="timeline-banner"><ClockMark /><span>CHRONOLOGY VIEW</span><strong>Causality remains visible across time</strong></div>}
         </ReactFlow>
 
+        <div className="atlas-atmosphere" aria-hidden="true" />
         <div className="canvas-vignette" />
-        <div className="atlas-caption"><span><Crosshair size={13} /> SEQUENCE INTELLIGENCE</span><strong>{traceMode ? `TRACING ${traceMode.toUpperCase()}` : 'CAUSAL ATLAS'}</strong></div>
+        <div className="atlas-caption"><span><Crosshair size={13} /> SEQUENCE INTELLIGENCE</span><strong>{traceMode ? `TRACING ${traceMode.toUpperCase()}` : 'CAUSAL MAP'}</strong></div>
         <Legend />
         <div className="canvas-tools">
-          <button onClick={() => fitView({ padding: 0.18, duration: 700, maxZoom: 0.9 })}><Focus size={15} /> Fit atlas</button>
+          <button onClick={() => fitView({ padding: 0.18, duration: 700, maxZoom: 0.9 })}><Focus size={15} /> Fit map</button>
           <button onClick={() => selectedNode && travelTo(selectedNode.id)}><LocateFixed size={15} /> Focus</button>
-          <button onClick={() => setFog(!fog)}><Layers3 size={15} /> {fog ? 'Reveal all' : 'Restore fog'}</button>
+          <button onClick={() => { resetNodePositions(); window.setTimeout(() => fitView({ padding: 0.18, duration: 700, maxZoom: 0.9 }), 20) }} disabled={timeline || !hasCustomLayout} title="Restore every moved node to its curated position"><RotateCcw size={14} /> Restore nodes</button>
         </div>
-        {introVisible && <div className="intro-toast"><span>THE MAP IS ALIVE</span><p>Drag to travel · scroll to zoom · select a discovery</p></div>}
+        {introVisible && <div className="intro-toast"><span>THE MAP IS ALIVE</span><p>Drag empty space to travel · drag discoveries to arrange · scroll to zoom</p></div>}
       </main>
 
       {selectedNode && !progressOpen && !discoveryOpen && <DetailPanel
@@ -309,7 +321,7 @@ function App() {
       {progressOpen && <ProgressPanel nodes={allNodes} statuses={statuses} onClose={() => setProgressOpen(false)} />}
       {discoveryOpen && <PaperDiscoveryPanel selectedNode={selectedNode} onClose={() => setDiscoveryOpen(false)} onImport={importPaper} />}
       {searchOpen && <SearchPalette nodes={allNodes.filter((node) => !fog || statusOf(node) !== 'locked')} onClose={() => setSearchOpen(false)} onSelect={travelTo} />}
-      {prologueOpen && <Prologue onEnter={enterAtlas} />}
+      {prologueOpen && <Prologue onEnter={enterAtlas} theme={theme} onToggleTheme={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')} />}
     </div>
   )
 }

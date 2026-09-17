@@ -29,7 +29,7 @@ export function SearchPalette({ nodes, onClose, onSelect }: SearchPaletteProps) 
     <div className="modal-backdrop" onMouseDown={onClose}>
       <div className="command-palette" onMouseDown={(event) => event.stopPropagation()}>
         <div className="command-input"><Search size={19} /><input ref={inputRef} value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && matches[0]) onSelect(matches[0].id) }} placeholder="Find papers, concepts, problems, authors…" /><kbd>ESC</kbd><button onClick={onClose}><X size={16} /></button></div>
-        <div className="command-context"><Command size={12} /> EXPLORE THE INTELLECTUAL ATLAS</div>
+        <div className="command-context"><Command size={12} /> EXPLORE THE INTELLECTUAL MAP</div>
         <div className="command-results">
           {matches.map((node, index) => {
             const Icon = icons[node.type]

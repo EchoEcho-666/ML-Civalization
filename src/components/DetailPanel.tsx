@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowDownRight, BookMarked, ChevronDown, CircleDotDashed, ExternalLink, FileText, GitFork, Lightbulb, Network, PanelRightClose, Route, Save, SearchCheck } from 'lucide-react'
+import { BookMarked, ChevronDown, CircleDotDashed, ExternalLink, FileText, GitFork, Network, PanelRightClose, Route, Save, SearchCheck, UsersRound } from 'lucide-react'
 import type { ExplorationStatus, ResearchNode } from '../types'
 import { nodeTypeLabels, statusLabels } from '../data/researchGraph'
 
@@ -33,7 +33,7 @@ function List({ values }: { values?: string[] }) {
 
 export function DetailPanel({ node, note, status, onClose, onStatus, onNote, onTrace }: DetailPanelProps) {
   const [draftNote, setDraftNote] = useState(note)
-  const initials = useMemo(() => node.authors?.slice(0, 3).map((author) => author.split(' ').map((p) => p[0]).join('')).join(' · '), [node.authors])
+  const authorLine = useMemo(() => node.authors?.join(', '), [node.authors])
 
   return (
     <aside className="detail-panel">
@@ -43,7 +43,7 @@ export function DetailPanel({ node, note, status, onClose, onStatus, onNote, onT
           <div className="detail-era"><span>{node.year ?? 'ONGOING'}</span><i /><span>{node.venue ?? nodeTypeLabels[node.type]}</span></div>
           <h1>{node.title}</h1>
           <p>{node.subtitle}</p>
-          {node.authors && <div className="authors"><span>{initials}</span><div>{node.authors.join(', ')}</div></div>}
+          {authorLine && <div className="authors"><UsersRound size={14} /><div>{authorLine}</div></div>}
         </div>
 
         <div className="status-control">
@@ -91,7 +91,6 @@ export function DetailPanel({ node, note, status, onClose, onStatus, onNote, onT
           <button onClick={() => onNote(draftNote)}><Save size={13} /> Save note</button>
         </div>
 
-        {node.openQuestions?.length ? <div className="idea-seed"><Lightbulb size={15} /><div><span>RESEARCH SEED</span><p>{node.openQuestions[0]}</p></div><ArrowDownRight size={15} /></div> : null}
         <button className="trace-lineage" onClick={() => onTrace('all')}><Network size={15} /> Trace full research lineage</button>
       </div>
     </aside>

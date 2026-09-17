@@ -205,7 +205,7 @@ export const researchNodes: ResearchNode[] = [
     openQuestions: ['Which experimental variable explains the disagreement?'], tags: ['contradiction', 'position'], position: { x: 2760, y: -370 },
   },
   {
-    id: 'position-experiment', type: 'research-idea', title: 'Position Ablation Atlas', subtitle: 'A discriminating experiment', year: 2026, status: 'current-research',
+    id: 'position-experiment', type: 'research-idea', title: 'Position Ablation Map', subtitle: 'A discriminating experiment', year: 2026, status: 'current-research',
     summary: 'Map when explicit position helps by controlling masking, task symmetry, training length, and extrapolation distance.',
     motivation: 'Existing studies change several variables at once, so their explanations remain underdetermined.',
     mechanism: 'Train matched small Transformers over a factorial grid and measure both task accuracy and internal order probes.',

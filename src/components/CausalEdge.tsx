@@ -18,7 +18,7 @@ export function CausalEdge({ id, sourceX, sourceY, targetX, targetY, sourcePosit
     <g className={`causal-edge ${data?.dimmed ? 'is-dimmed' : ''} ${data?.featured ? 'is-featured' : ''}`}>
       <BaseEdge id={id} path={path} markerEnd={markerEnd} className="edge-visible" />
       <path d={path} className="edge-hitbox" fill="none" />
-      <foreignObject x={labelX - 110} y={labelY - 34} width="220" height="68" className="edge-foreign">
+      <foreignObject x={labelX - 120} y={labelY - 44} width="240" height="88" className="edge-foreign">
         <div
           className="edge-label nodrag nopan"
         >

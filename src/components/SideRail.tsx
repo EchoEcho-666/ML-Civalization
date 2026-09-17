@@ -7,7 +7,7 @@ interface SideRailProps {
 
 const items = [
   { id: 'origins', icon: Network, label: 'Origins' },
-  { id: 'atlas', icon: Map, label: 'Atlas' },
+  { id: 'atlas', icon: Map, label: 'Map' },
   { id: 'lineage', icon: GitBranch, label: 'Lineage' },
   { id: 'frontier', icon: Binoculars, label: 'Frontier' },
   { id: 'notes', icon: NotebookPen, label: 'Notes' },
@@ -24,7 +24,7 @@ export function SideRail({ active, onSelect }: SideRailProps) {
           </button>
         ))}
       </nav>
-      <div className="coordinates"><span>ATLAS</span><strong>04.17</strong></div>
+      <div className="coordinates"><span>MAP</span><strong>04.17</strong></div>
     </aside>
   )
 }
